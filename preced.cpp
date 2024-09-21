@@ -137,9 +137,10 @@ return topnum() ;
 }
 
 
-void main()
+int main()
 {
-	clrscr();
+	//clrscr();
 	printf("\n%i\n", calc());
 	getch();
+	return 0;
 }
