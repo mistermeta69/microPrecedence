@@ -1,65 +1,67 @@
 Table-based shift/Reduce parser for expressions
 Based on Aho and Ullman description in Dragon book
 
-This code implements a precedence parser for basic arithmetic expressions. It's a shift-reduce parser that can handle addition, subtraction, multiplication, division, and parentheses. Let's break down the main components and functionality of this code:
+Can handle addition, subtraction, multiplication, division, and parentheses. 
 
 ## Main Components
 
-1. Token Recognition (`gettoken` function)
-2. Expression Evaluation (`eval` function)
-3. Operator and Operand Stacks
-4. Precedence Tables
-5. Parsing Algorithm (`calc` function)
+1. Token handling (`gettoken` function)
+2. Operator and operand stacks
+3. Precedence tables
+4. Evaluation function
+5. Main parsing algorithm (`calc` function)
 
 ## Functionality Breakdown
 
-### 1. Token Recognition
+### 1. Token Handling
 
 The `gettoken` function reads input characters and converts them into tokens:
-- Numbers (0-9) are converted to their integer values
-- Operators (+, -, *, /) are assigned specific token codes
-- Parentheses and end-of-input are also recognized
+- Numbers (0)
+- Operators (+, -, *, /)
+- Parentheses
+- End of input (DONE)
 
-### 2. Expression Evaluation
+### 2. Stacks
 
-The `eval` function performs basic arithmetic operations based on the operator and two operands.
+Two stacks are used:
+- `opstk`: Operator stack
+- `numstk`: Operand (number) stack
 
-### 3. Operator and Operand Stacks
-
-Two separate stacks are maintained:
-- `opstk` for operators
-- `numstk` for numbers (operands)
-
-Each stack has its own push and pop operations.
-
-### 4. Precedence Tables
+### 3. Precedence Tables
 
 Two arrays define the precedence rules:
 - `prstk`: Precedence of the operator on top of the stack
 - `prinp`: Precedence of the input operator
 
-These tables determine whether to shift, reduce, or discard tokens during parsing.
+### 4. Evaluation
+
+The `eval` function performs the actual arithmetic operations.
 
 ### 5. Parsing Algorithm
 
 The `calc` function implements the main parsing algorithm:
-1. Get the next token
+1. Read a token
 2. If it's a number, push it onto the number stack
-3. If it's an operator, compare its precedence with the top of the operator stack:
-   - If input precedence is higher: shift (push onto operator stack)
-   - If precedences are equal: discard both (usually for parentheses matching)
-   - If stack precedence is higher: reduce (evaluate top operation and push result)
-4. Repeat until end of input is reached and all operations are evaluated
+3. If it's an operator:
+   - If input precedence > stack precedence: shift (push onto operator stack)
+   - If input precedence = stack precedence: discard both (for matching parentheses)
+   - If input precedence < stack precedence: reduce (evaluate top of stack)
 
-## Usage
+## How It Works
 
-The `main` function calls `calc` and prints the result of the evaluated expression.
+1. The parser reads the input expression character by character.
+2. It builds numbers from consecutive digits.
+3. For operators and parentheses, it compares their precedence with the top of the operator stack.
+4. Based on the precedence comparison, it decides to shift, reduce, or discard.
+5. When reducing, it pops two numbers and an operator, evaluates them, and pushes the result back.
+6. This process continues until the entire expression is parsed and evaluated.
 
 ## Limitations and Potential Improvements
 
-1. Error handling is minimal
-2. Only single-digit numbers are supported
-3. The code uses some outdated C practices (e.g., `<conio.h>`)
-4. Input is limited to a single line
+1. No error handling for invalid expressions
+2. Limited to integer arithmetic
+3. No support for unary operators (like negation)
+4. No support for floating-point numbers
+5. Input is limited to a single line
 
-To improve this parser, you could add better error handling, support for multi-digit numbers, and modernize the C code style. Additionally, extending it to handle more complex expressions or different types of operations could make it more versatile.
+Overall, this is a functional implementation of a precedence parser for basic arithmetic expressions, suitable for educational purposes or as a starting point for a more robust expression evaluator.
